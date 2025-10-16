@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Form</title>
+</head>
+<body style="background-color: lightgrey;">
+
+    <h2>Feedback Form</h2>
+
+    <form>
+
+        Name: <input type="text" name="name"><br><br>
+
+        Email: <input type="email" name="email"><br><br>
+
+        Who Suggest Us:
+        <select name="source">
+            <option>Friends</option>
+            <option>Social Media</option>
+            <option>Advertisement</option>
+            <option>Other</option>
+        </select><br><br>
+
+        Rate our service: <br>
+        <input type="radio" name="rating" value="Excellent"> Excellent
+        <input type="radio" name="rating" value="Good"> Good
+        <input type="radio" name="rating" value="Average"> Average
+        <input type="radio" name="rating" value="Poor"> Poor
+        <br><br>
+
+        What did you like?<br>
+        <input type="checkbox" name="like" value="Quality"> Quality
+        <input type="checkbox" name="like" value="Service"> Service
+        <input type="checkbox" name="like" value="Price"> Price
+        <br><br>
+
+        Your Feedback:<br>
+        <textarea name="message" rows="4" cols="30"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+
+    </form>
+
+</body>
+</html>

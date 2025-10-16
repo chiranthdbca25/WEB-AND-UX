@@ -1,0 +1,164 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <title>Styled Form and Table</title>
+  <style>
+    /* General body styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f8;
+      margin: 40px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    /* Form styling */
+    form {
+      background-color: #ffffff;
+      max-width: 400px;
+      margin: 0 auto 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Table styling */
+    table {
+      width: 70%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      background-color: white;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f2f2f2;
+    }
+
+    /* Footer styling */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Student Information Form</h2>
+
+  <!-- Form -->
+  <form id="studentForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" placeholder="Enter your name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="Enter your email" required>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Table -->
+  <table id="studentTable">
+    <thead>
+      <tr>
+        <th>Sr. No</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+
+  <div class="footer">
+    RV Vidyaniketan, 8th Mile, Mysuru Road, Bengaluru – 560059, India<br>
+    Ph: +91 80 68199900 | www.rvu.edu.in
+  </div>
+
+  <script>
+    const form = document.getElementById('studentForm');
+    const tableBody = document.querySelector('#studentTable tbody');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent page reload on submit
+
+      // Get input values
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+
+      if(name === '' || email === '') {
+        alert('Please fill in both fields.');
+        return;
+      }
+
+      // Calculate new serial number based on current rows
+      const newSrNo = tableBody.rows.length + 1;
+
+      // Create a new row and cells
+      const newRow = tableBody.insertRow();
+      const cellSrNo = newRow.insertCell(0);
+      const cellName = newRow.insertCell(1);
+      const cellEmail = newRow.insertCell(2);
+
+      // Set cell contents
+      cellSrNo.textContent = newSrNo;
+      cellName.textContent = name;
+      cellEmail.textContent = email;
+
+      // Clear form inputs
+      nameInput.value = '';
+      emailInput.value = '';
+
+      // Optionally, focus back on name input
+      nameInput.focus();
+    });
+  </script>
+
+</body>
+</html>
