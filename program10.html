@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DOM Manipulation Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f0f4f8;
+    }
+
+    h2 {
+      color: #2f8d46;
+    }
+
+    #content {
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      margin: 0.5rem;
+      padding: 0.6rem 1rem;
+      background-color: #2f8d46;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #256f38;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>JavaScript DOM Manipulation</h2>
+
+  <div id="content">This is the original content.</div>
+
+  <button onclick="changeText()">Change Text</button>
+  <button onclick="changeColor()">Change Background</button>
+  <button onclick="toggleVisibility()">Toggle Visibility</button>
+
+  <script>
+    function changeText() {
+      const content = document.getElementById("content");
+      content.textContent = "🎉 The content has been updated!";
+    }
+
+    function changeColor() {
+      const content = document.getElementById("content");
+      content.style.backgroundColor = "#ffe5b4";
+    }
+
+    function toggleVisibility() {
+      const content = document.getElementById("content");
+      if (content.style.display === "none") {
+        content.style.display = "block";
+      } else {
+        content.style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
