@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BCA WEBSITE</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+
+    header {
+      background-color: #2f8d46;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background-color: #e6f4ea;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .hero h2 {
+      margin-bottom: 1rem;
+    }
+
+    .hero input {
+      padding: 0.6rem;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .hero button {
+      padding: 0.6rem 1rem;
+      margin-left: 0.5rem;
+      background-color: #2f8d46;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .section {
+      padding: 2rem;
+    }
+
+    .section h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #2f8d46;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card.clicked {
+      background-color: #d1e7dd;
+      border: 2px solid #2f8d46;
+    }
+
+    .card h4 {
+      margin-bottom: 0.75rem;
+      color: #2f8d46;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Unique hover colors */
+    .card:nth-child(1):hover { background-color: #ffe5e5; }
+    .card:nth-child(2):hover { background-color: #e5f0ff; }
+    .card:nth-child(3):hover { background-color: #fff7cc; }
+    .card:nth-child(4):hover { background-color: #e5ffe5; }
+    .card:nth-child(5):hover { background-color: #f0e5ff; }
+    .card:nth-child(6):hover { background-color: #ffe5f0; }
+    .card:nth-child(7):hover { background-color: #e5ffff; }
+    .card:nth-child(8):hover { background-color: #f9e5d0; }
+
+    footer {
+      background-color: #2f8d46;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    /* Blinking animation */
+    @keyframes blink {
+      0% { background-color: #d1e7dd; }
+      50% { background-color: #fff; }
+      100% { background-color: #d1e7dd; }
+    }
+
+    .blink {
+      animation: blink 0.5s ease-in-out 3;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>BCA(Hons.)STUDY REFERENCE</h1>
+    <nav>
+      <ul>
+        <li><a href="#">TUTORIALS</a></li>
+        <li><a href="#">COURSES</a></li>
+        <li><a href="#">PRACTICE</a></li>
+        <li><a href="#">QUIZ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Learn Programming, Digital Logic, Web Development, Elements of linear Algebra, Linux & More..</h2>
+    <input type="text" id="searchInput" placeholder="Search tutorials..." />
+    <button onclick="search()">Search</button>
+  </section>
+
+  <section class="section">
+    <h3>Tutorials</h3>
+    <div class="cards">
+      <div class="card"><h4>C Programming</h4><p>Basic Concepts, Control Statements, Looping Statements, Functions, Arrays(1D/2D), Pointers & More..</p></div>
+      <div class="card"><h4>Web Development</h4><p>HTML, CSS, JavaScript, React & backend skills.</p></div>
+      <div class="card"><h4>Linux</h4><p>Basic Commands, Shell Scripting, Awk Scripting &More..</p></div>
+      <div class="card"><h4>Digital Electronics/logic</h4><p>Numbers Systems, Implementation of Gates, K-map, Half-adder & Full-adder, MUX & D-MUX & More..</p></div>
+      <div class="card"><h4>Elements Of Linear Algebra</h4><p>Vectors, Matrices & Determinants, Rank and System of linear Equations, linear Transformation, Eigen Values & Eigen Vectors &More..</p></div>
+      <div class="card"><h4>Python Programming</h4><p>Learn Python from basics to advanced projects.</p></div>
+      <div class="card"><h4>Database Management</h4><p>Learn SQL, NoSQL, and data modeling techniques.</p></div>
+      <div class="card"><h4>Cybersecurity</h4><p>Understand threats, encryption, and ethical hacking.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 BCA website. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function search() {
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      if (!q) {
+        alert("Please enter a topic to search.");
+        return;
+      }
+
+      let found = false;
+      const cards = document.querySelectorAll(".card");
+
+      cards.forEach(card => {
+        const title = card.querySelector("h4").textContent.toLowerCase();
+        if (title.includes(q)) {
+          found = true;
+          card.classList.add("blink");
+          setTimeout(() => card.classList.remove("blink"), 1500);
+        }
+      });
+
+      if (!found) {
+        alert("No matching tutorial found.");
+      }
+    }
+
+    document.addEventListener("click", e => {
+      if (e.target.classList.contains("card")) {
+        e.target.classList.toggle("clicked");
+      }
+    });
+  </script>
+
+</body>
+</html>
