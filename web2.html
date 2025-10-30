@@ -6,7 +6,6 @@
   <title>Chiranth Personal Webpage</title>
 
   <style>
-    /* ---------- CSS ---------- */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -17,8 +16,32 @@
       transition: background-color 0.5s;
     }
 
+  
+    nav {
+      background-color: #0078ff;
+      padding: 15px 0;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 20px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffdf00;
+    }
+
     h1 {
       color: #0078ff;
+      margin-top: 90px; 
       margin-bottom: 10px;
     }
 
@@ -49,6 +72,11 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
+    table {
+      margin: 20px auto;
+      width: fit-content;
+      border-collapse: collapse;
+    }
 
     button {
       background-color: #0078ff;
@@ -72,40 +100,107 @@
       font-size: 14px;
       color: #777;
     }
+
+  
+    #aboutModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 100;
+      width: 80%;
+      max-width: 500px;
+    }
+
+    #closeBtn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      cursor: pointer;
+      font-size: 20px;
+      color: #0078ff;
+    }
+
   </style>
 </head>
 
 <body>
-  <!-- ---------- HTML ---------- -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
   <h1>Welcome to My Personal Webpage 🌟</h1>
   <img src="https://img.freepik.com/premium-vector/male-face-avatar-icon-set-flat-design-social-media-profiles_1281173-3806.jpg" alt="Chiranth's Photo">
-  <h2>Name: <u>Chiranth D</u></h2>
 
-  <div id="about">
-    <h3>About Me</h3>
+  <h2>PERSONAL INFO</h2>
+  <p>NAME: CHIRANTH D</p>
+  <p>COURSE: BCA</p>
+  <p>COLLEGE: RV UNIVERSITY</p>
+    
+  <table border="3" cellspacing="10">
+    <tr>
+      <th>SL NO</th>
+      <th>HOBBIES</th>
+      <th>ACHIEVEMENTS</th>
+    </tr>
+    <tr>
+      <td>1.</td>
+      <td>CODING</td>
+      <td>I AM AWARDED BY GOVERNMENT</td>
+    </tr>
+    <tr>
+      <td>2.</td>
+      <td>PLAYING VOLLEYBALL</td>
+      <td>STATE LEVEL</td>
+    </tr>
+  </table>
+
+  <button onclick="changeBackground()">Change theme</button>
+  <button id="aboutBtn">About Me</button>
+
+  <div id="aboutModal">
+    <span id="closeBtn">&times;</span>
     <p>
       Hi! I'm <b>Chiranth</b>, a passionate BCA student who loves coding, learning new technologies, 
       and exploring creative ideas.
     </p>
   </div>
 
-
-  <button onclick="changeBackground()">Change theme</button>
-
-  <footer>
-    <p>Made by Chiranth D</p>
-  </footer>
+  <footer>© 2025 Chiranth D | All Rights Reserved</footer>
 
   <script>
-    /* ---------- JavaScript ---------- */
-
-
-    // Function to change background color randomly
     function changeBackground() {
       const colors = ["#f4f4f4", "#cde7ff", "#fff3cd", "#d4edda", "#f8d7da"];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
       document.body.style.backgroundColor = randomColor;
     }
+
+  
+    const aboutBtn = document.getElementById("aboutBtn");
+    const aboutModal = document.getElementById("aboutModal");
+    const closeBtn = document.getElementById("closeBtn");
+
+    aboutBtn.onclick = function() {
+      aboutModal.style.display = "block";
+    }
+
+    closeBtn.onclick = function() {
+      aboutModal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target === aboutModal) {
+        aboutModal.style.display = "none";
+      }
+    }
   </script>
+
 </body>
 </html>
