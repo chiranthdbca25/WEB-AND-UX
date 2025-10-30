@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chiranth Personal Webpage</title>
+
+  <style>
+    /* ---------- CSS ---------- */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 50px 20px;
+      transition: background-color 0.5s;
+    }
+
+    h1 {
+      color: #0078ff;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #555;
+      margin-top: 5px;
+    }
+
+    p {
+      font-size: 17px;
+      color: #444;
+    }
+
+    img {
+      width: 180px;
+      border-radius: 50%;
+      border: 4px solid #0078ff;
+      margin-top: 15px;
+    }
+
+    #about {
+      max-width: 600px;
+      margin: 20px auto;
+      text-align: center;
+      background: #ffffffcc;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+
+    button {
+      background-color: #0078ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s, transform 0.2s;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+      transform: scale(1.05);
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ---------- HTML ---------- -->
+  <h1>Welcome to My Personal Webpage 🌟</h1>
+  <img src="https://img.freepik.com/premium-vector/male-face-avatar-icon-set-flat-design-social-media-profiles_1281173-3806.jpg" alt="Chiranth's Photo">
+  <h2>Name: <u>Chiranth D</u></h2>
+
+  <div id="about">
+    <h3>About Me</h3>
+    <p>
+      Hi! I'm <b>Chiranth</b>, a passionate BCA student who loves coding, learning new technologies, 
+      and exploring creative ideas.
+    </p>
+  </div>
+
+
+  <button onclick="changeBackground()">Change theme</button>
+
+  <footer>
+    <p>Made by Chiranth D</p>
+  </footer>
+
+  <script>
+    /* ---------- JavaScript ---------- */
+
+
+    // Function to change background color randomly
+    function changeBackground() {
+      const colors = ["#f4f4f4", "#cde7ff", "#fff3cd", "#d4edda", "#f8d7da"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      document.body.style.backgroundColor = randomColor;
+    }
+  </script>
+</body>
+</html>
