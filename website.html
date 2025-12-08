@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Career Choice</title>
+<style>
+  :root{
+    --bg1:#6a39ff; --bg2:#d06bff; --card:#fff; --muted:#6b6b83;
+    --accent:#7a5cff; --success:#3ad29f; --danger:#ff5c7c;
+  }
+  *{box-sizing:border-sizing}
+  body{
+    margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:20px;color:#1b1536;
+    background:
+      linear-gradient(135deg, rgba(106,57,255,0.12), rgba(208,107,255,0.06)),
+      url('https://t3.ftcdn.net/jpg/07/10/88/12/240_F_710881247_szoddYVfMndfm5SIm0K7EBupudUYVTlx.jpg') center/cover fixed no-repeat;
+  }
+
+  .container{ width:100%; max-width:980px; display:flex; justify-content:center; }
+  .card{
+    width:560px; max-width:96%;
+    background:rgba(255,255,255,0.98);
+    border-radius:14px; padding:20px; box-shadow:0 20px 50px rgba(11,6,36,0.18);
+  }
+
+  /* UPDATED: Top Bar and Profile Styles */
+  .topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .logo{ display:flex; align-items:center; gap:12px; }
+  .logo .badge{ background:white;padding:8px 12px;border-radius:8px;font-weight:800;color:var(--bg1); box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+  .profile-info{ text-align:right; color:#2b1f56; font-size:13px; font-weight:600; }
+  .profile-info .muted-text{ color:var(--muted); font-weight:500; }
+  .profile-wrap{ display:flex; align-items:center; gap:12px; }
+  .profile-avatar{ width:40px; height:40px; border-radius:50%; background:#f3f3f3; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--bg1); font-size:12px; overflow:hidden; border:2px solid var(--accent); background-size:cover; background-position:center; }
+  .logout-btn{ background:none; border:none; color:var(--danger); font-size:12px; cursor:pointer; margin-top:4px; padding:0; font-weight:600; }
+  /* END UPDATED */
+
+  .title{ font-size:18px; font-weight:700; margin:10px 0; text-align:center; color:#2b1f56; }
+
+  .page{ display:none; width:100%; }
+  .page.active{ display:block; }
+
+  input[type="text"], input[type="date"], input[type="number"], select, input[type="file"]{
+    width:100%; padding:10px; border-radius:10px; border:1px solid #e9e7fb; font-size:14px;
+    transition: box-shadow .12s ease, border-color .12s ease;
+  }
+  input:focus, select:focus { outline:none; box-shadow:0 8px 20px rgba(122,92,255,0.06); border-color:var(--accent); }
+
+  .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px; }
+  @media(max-width:720px){ .form-grid{ grid-template-columns:1fr; } }
+
+  label{ font-size:13px; color:var(--muted); display:block; margin-bottom:6px; font-weight:600; }
+
+  .btn{ display:inline-block; padding:10px 14px; border-radius:10px; border:none; background:var(--accent); color:white; font-weight:700; cursor:pointer; }
+  .btn.ghost{ background:transparent; color:var(--accent); border:2px solid rgba(122,92,255,0.12); }
+
+  .stream-pill{ padding:10px 14px; border-radius:999px; background:#fbf8ff; border:1px solid rgba(11,6,36,0.06); cursor:pointer; transition: transform .12s ease, box-shadow .12s ease; }
+  .stream-pill:hover, .stream-pill:focus { transform:translateY(-4px); box-shadow:0 10px 24px rgba(122,92,255,0.08); }
+  .stream-pill.selected{ background:linear-gradient(90deg,#efe6ff,#efe0ff); border-color:var(--accent); box-shadow:0 8px 22px rgba(122,92,255,0.12); }
+
+  .input-wrap{ transition: background .12s ease, box-shadow .12s ease, transform .12s ease; border-radius:10px; padding:6px; }
+  .input-wrap:hover{ background:rgba(122,92,255,0.03); box-shadow:0 6px 18px rgba(122,92,255,0.03); transform:translateY(-2px); }
+
+  .result{ margin-top:12px; padding:12px; border-radius:10px; background:linear-gradient(90deg,#f8f7ff,#fff); border-left:6px solid var(--accent); font-weight:700; color:#2b1f56; }
+  .percent-wrap{ margin-top:12px; background:#f4f2ff; border-radius:10px; height:14px; overflow:hidden; width:100%; }
+  .percent-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--success),#36b3a8); transition:width 900ms ease; }
+
+  .exam-list{ margin-top:12px; width:100%; display:none; }
+  .exam-list.active{ display:block; }
+  .exam-list ul{ list-style:decimal; padding-left:18px; margin:8px 0; color:#222; }
+  .exam-list li{ margin:6px 0; font-weight:600; }
+
+  /* rank modal */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:9999; }
+  .modal{ background:white; padding:18px; border-radius:12px; width:340px; max-width:92%; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
+  .modal h3{ margin:0 0 8px 0; font-size:16px; }
+  .modal .row{ margin-top:8px; display:flex; gap:8px; align-items:center; }
+  .muted{ font-size:13px; color:var(--muted); text-align:center; margin-top:8px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="region" aria-label="Career Choice Card">
+
+      <div class="topbar">
+        <div class="logo">
+          <div class="badge">CAREER CHOICE</div>
+        </div>
+        <div id="userInfoDisplay" style="text-align:right;color:var(--muted)">
+          <small>FOR FUTURE DECISION</small>
+        </div>
+      </div>
+      <div id="page-start" class="page active">
+        <p class="title">Welcome — Choose your career</p>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button class="stream-pill" onclick="showPage('page-login')">Login & Enter Details</button>
+        </div>
+        <p class="muted">Note: </p>
+          <p class="muted">1.Uploading a photo is compulsory.</p>
+          <p class="muted">2.Filling all details in the login page.</p>
+      </div>
+
+      <div id="page-login" class="page">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <button class="btn ghost" onclick="showPage('page-start')">← Back</button>
+        </div>
+
+        <p class="title">Student Details</p>
+
+        <div class="form-grid">
+          <div class="input-wrap">
+            <label for="inpName">Full name</label>
+            <input id="inpName" type="text" placeholder="Your name" />
+          </div>
+
+          <div style="text-align:center">
+            <label>Photo</label>
+            <div id="previewAvatar" class="profile-avatar" style="width:84px;height:84px;margin:6px auto;border-radius:12px;border:2px solid #6a39ff;">
+              UP
+            </div>
+            <input id="inpPhoto" type="file" accept="image/*" onchange="handlePhoto(this)" style="font-size:12px;margin-top:8px" />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="input-wrap">
+            <label for="inpDob">Date of birth</label>
+            <input id="inpDob" type="date" />
+          </div>
+          <div class="input-wrap">
+            <label for="inpChoice">Choose at login</label>
+            <select id="inpChoice">
+              <option value="" selected disabled>-- choose --</option>
+              <option value="SSLC">SSLC (10th)</option>
+              <option value="PUC">PUC (12th)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:6px">
+          <button class="btn" onclick="submitLogin()">Submit & Continue</button>
+          <button class="btn ghost" onclick="showPage('page-start')">Cancel</button>
+        </div>
+      </div>
+
+      <div id="page-sslc" class="page">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <button class="btn ghost" onclick="showPage('page-login')">← Back</button>
+        </div>
+        <p class="title">SSLC / 10th Marks</p>
+
+        <div class="form-grid">
+          <div class="input-wrap"><label>Kannada</label><input id="sslc_lang1" type="number" min="0" max="100"></div>
+          <div class="input-wrap"><label>English</label><input id="sslc_lang2" type="number" min="0" max="100"></div>
+          <div class="input-wrap"><label>Hindi</label><input id="sslc_hindi" type="number" min="0" max="100"></div>
+          <div class="input-wrap"><label>Maths</label><input id="sslc_maths" type="number" min="0" max="100"></div>
+          <div class="input-wrap"><label>Science</label><input id="sslc_science" type="number" min="0" max="100"></div>
+          <div class="input-wrap"><label>Social Science</label><input id="sslc_social" type="number" min="0" max="100"></div>
+        </div>
+
+        <div style="text-align:center;margin-top:8px">
+          <button class="btn" onclick="calculateSSLC()">Calculate</button>
+          <button class="btn ghost" onclick="clearSSLC()">Clear</button>
+        </div>
+
+        <div id="sslc_result" class="result" style="display:none;"></div>
+        <div id="sslc_bar" class="percent-wrap" style="display:none;"><div id="sslc_fill" class="percent-fill"></div></div>
+      </div>
+
+      <div id="page-puc-select" class="page">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <button class="btn ghost" onclick="showPage('page-login')">← Back</button>
+        </div>
+        <p class="title">PUC — Choose stream & group</p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:10px">
+          <button id="pillScience" class="stream-pill" onclick="selectStream('Science')">Science</button>
+          <button id="pillCommerce" class="stream-pill" onclick="selectStream('Commerce')">Commerce</button>
+          <button id="pillArts" class="stream-pill" onclick="selectStream('Arts')">Arts</button>
+        </div>
+
+        <div style="width:100%;margin-top:6px">
+          <label>Selected Group</label>
+          <select id="pucGroup"><option value="" disabled selected>-- group (will populate) --</option></select>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+          <button class="btn" onclick="lockStream()">Select this stream</button>
+          <button class="btn ghost" onclick="showPage('page-start')">Home</button>
+        </div>
+      </div>
+
+      <div id="page-puc" class="page">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <button class="btn ghost" onclick="showPage('page-puc-select')">← Back</button>
+        </div>
+
+        <p id="pucTitle" class="title">PUC Marks & Exams</p>
+
+        <div id="pucInputs" style="width:100%;"></div>
+
+        <div id="examSelectors" style="width:100%; margin-top:12px; display:none;">
+          <label>IF YOU HAVE WRITTIEN THE EXAM (click)</label>
+          <div id="examButtons" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+        </div>
+
+        <div style="text-align:center;margin-top:12px">
+          <button class="btn" onclick="calculatePUC()">Calculate</button>
+          <button class="btn ghost" onclick="clearPUC()">Clear</button>
+        </div>
+
+        <div id="puc_result" class="result" style="display:none;"></div>
+        <div id="puc_bar" class="percent-wrap" style="display:none;"><div id="puc_fill" class="percent-fill"></div></div>
+
+        <div id="examLists" class="exam-list" aria-live="polite"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rankTitle">
+      <h3 id="rankTitle">Enter your rank</h3>
+      <div>
+        <label for="rankInput" style="font-weight:600;margin-bottom:6px;display:block">Rank (numeric)</label>
+        <input id="rankInput" type="number" min="1" placeholder="e.g. 850" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
+      </div>
+      <div class="row" style="justify-content:flex-end;margin-top:12px">
+        <button class="btn ghost" onclick="closeRankModal()">Cancel</button>
+        <button class="btn" style="margin-left:8px" id="rankConfirmBtn">Show Colleges</button>
+      </div>
+      <div class="muted">We will show recommended colleges based on the entered rank band.</div>
+    </div>
+  </div>
+
+<script>
+  /* State */
+  const STUDENT = { name:'', dob:'', photo:'', id:'' };
+  const SELECTED = { choice:'', pucStream:'', pucGroup:'', currentExam:'' };
+  let PUC_CALCULATED = false; // NEW: Flag to check if PUC calculation was done
+
+  /* TOP lists (5 per band). KCET PCMB biology lists included. */
+  const TOP_BY_EXAM = {
+    NEET: [
+      "AIIMS, New Delhi","CMC, Vellore","AFMC, Pune","Maulana Azad Medical College, New Delhi","Kasturba Medical College (KMC), Manipal",
+      "St. John's Medical College, Bengaluru","Lady Hardinge Medical College, Delhi","Grant Medical College, Mumbai","KMC, Mangalore","JIPMER, Puducherry",
+      "KMC, Belgaum","Bangalore Medical College, Bengaluru","Seth GS Medical College, Mumbai","Banaras Hindu University – IMS, Varanasi","KGMU, Lucknow",
+      "Sanjay Gandhi PGIMS, Lucknow","Calcutta Medical College, Kolkata","Rangadore Memorial Hospital, Bengaluru","Government Medical College (sample)","Regional Medical College (sample)"
+    ],
+    JEE: [
+      "IIT Madras","IIT Bombay","IIT Delhi","IIT Kharagpur","IIT Kanpur",
+      "IISc Bengaluru","IIT Roorkee","IIT Guwahati","IIT Hyderabad","IIT BHU (Varanasi)",
+      "NIT Trichy","NIT Surathkal","BITS Pilani","NIT Warangal","IIIT Hyderabad",
+      "NIT Calicut","NIT Rourkela","NIT Durgapur","IIIT Allahabad","Regional Engineering College (sample)"
+    ],
+    KCET: [
+      /* For PCMB (biology focus) we suggest colleges strong in biological/science streams as band1..band4 */
+      "St. John's Medical College (bio allied programs)", "Christ (Deemed) University — Science/Bio programmes", "Bangalore Medical College allied programs (seat-linked)", "Kasturba Medical College (Manipal, seat-linked)", "JSS Medical & Science allied programs",
+      "Bangalore Institute of Science - (bio)", "Siddaganga Institute - bio-science", "Mysore University Science - applied biology", "Davangere University allied", "Mangalore University - biology",
+      "Regional University A - bio", "Regional College B - bio", "Private Science College C", "Private Science College D", "Private Science College E",
+      "Lower-ranked Bio College A", "Lower-ranked Bio College B", "Lower-ranked Bio College C", "Lower-ranked Bio College D", "Lower-ranked Bio College E"
+    ],
+    COMEDK: [
+      "PES University, Bengaluru","RV College of Engineering, Bengaluru","BMS College of Engineering, Bengaluru","MSRIT, Bengaluru","PESIT, Bangalore South",
+      "New Horizon College of Engineering, Bengaluru","SJCE, Mysuru","Dayananda Sagar, Bengaluru","Cambridge Institute of Technology, Bengaluru","BNM Institute of Technology, Bengaluru",
+      "Siddaganga Institute of Technology, Tumkur","Ramaiah Institute (other campus)","City Engg College X","Private College Y","Private College Z",
+      "Lower-ranked College A","Lower-ranked College B","Lower-ranked College C","Lower-ranked College D","Lower-ranked College E"
+    ]
+  };
+
+  /* Utility: show page and update UI */
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const el = document.getElementById(id);
+    if(el) el.classList.add('active');
+    hideExamList();
+    // New: Update top bar info on page change
+    updateUserInfoDisplay();
+  }
+
+  // New: Update user info in the top right corner
+  function updateUserInfoDisplay(){
+    const infoDisplay = document.getElementById('userInfoDisplay');
+    if(STUDENT.id && STUDENT.name){
+      infoDisplay.innerHTML = `
+        <div class="profile-wrap">
+          <div class="profile-avatar" style="${STUDENT.photo ? `background-image: url('${STUDENT.photo}');` : ''}">
+            ${!STUDENT.photo ? STUDENT.name.charAt(0) : ''}
+          </div>
+          <div class="profile-info">
+            <div>${STUDENT.name.split(' ')[0]}</div>
+            <div class="muted-text">ID: ${STUDENT.id}</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+          </div>
+        </div>
+      `;
+    } else {
+      infoDisplay.innerHTML = `<small>FOR FUTURE DECISION</small>`;
+    }
+  }
+
+  // New: Logout function (UPDATED to reset PUC_CALCULATED)
+  function logout(){
+    STUDENT.name = '';
+    STUDENT.dob = '';
+    STUDENT.photo = '';
+    STUDENT.id = '';
+    SELECTED.choice = '';
+    SELECTED.pucStream = '';
+    SELECTED.pucGroup = '';
+    SELECTED.currentExam = '';
+    PUC_CALCULATED = false; // RESET FLAG
+    // Reset login form fields
+    document.getElementById('inpName').value = '';
+    document.getElementById('inpDob').value = '';
+    document.getElementById('inpChoice').value = '';
+    // Reset photo preview
+    const avatar = document.getElementById('previewAvatar');
+    avatar.style.backgroundImage = '';
+    avatar.textContent = 'UP';
+    document.getElementById('inpPhoto').value = ''; // Clear file input
+    showPage('page-start');
+  }
+
+  /* Photo handling (UPDATED) */
+  function handlePhoto(input){
+    const file = input.files && input.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = e=>{
+      STUDENT.photo = e.target.result;
+      const avatar = document.getElementById('previewAvatar');
+      avatar.style.backgroundImage = `url('${STUDENT.photo}')`;
+      avatar.textContent = '';
+      avatar.classList.add('has-photo');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* Login (UPDATED) */
+  function submitLogin(){
+    const name = document.getElementById('inpName').value.trim();
+    const dob = document.getElementById('inpDob').value;
+    const choice = document.getElementById('inpChoice').value;
+    if(!name || !dob || !choice){ alert('Fill name, dob and choice'); return; }
+    if(!STUDENT.photo){ alert('Please upload a photo.'); return; } // Check for photo
+    STUDENT.name = name; 
+    STUDENT.dob = dob; 
+    // Autogenerated ID (4-digit random number prefixed with STD)
+    STUDENT.id = 'STD' + Math.floor(1000 + Math.random()*9000);
+    SELECTED.choice = choice;
+    // Update top bar info immediately after login
+    updateUserInfoDisplay(); 
+
+    if(choice === 'SSLC') showPage('page-sslc');
+    else showPage('page-puc-select');
+  }
+
+  /* SSLC */
+  function clearSSLC(){
+    ['sslc_lang1','sslc_lang2','sslc_hindi','sslc_maths','sslc_science','sslc_social'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('sslc_result').style.display='none';
+    document.getElementById('sslc_bar').style.display='none';
+    document.getElementById('sslc_fill').style.width='0%';
+  }
+  function calculateSSLC(){
+    const ids = ['sslc_lang1','sslc_lang2','sslc_hindi','sslc_maths','sslc_science','sslc_social'];
+    const vals = ids.map(id => parseFloat(document.getElementById(id).value));
+    if(vals.some(v=>isNaN(v))){ alert('Enter all SSLC marks'); return; }
+    const total = vals.reduce((a,b)=>a+b,0);
+    const percent = total/6;
+    const sciAvg = (vals[3] + vals[4])/2;
+    let stream = 'Arts';
+    if(percent >= 75 && sciAvg >= 70) stream = 'Science (PCMB / PCMCS)';
+    else if(percent >= 60) stream = 'Commerce';
+    const res = document.getElementById('sslc_result');
+    res.style.display = 'block';
+    res.innerHTML = `Total: <b>${total}</b>/600 <br> Percentage: <b>${percent.toFixed(2)}%</b> <br> Recommended: <b>${stream}</b>`;
+    document.getElementById('sslc_bar').style.display='block';
+    document.getElementById('sslc_fill').style.width = Math.min(100,percent) + '%';
+  }
+
+  /* PUC stream selection */
+  function selectStream(stream){
+    SELECTED.pucStream = stream;
+    ['pillScience','pillCommerce','pillArts'].forEach(id=>document.getElementById(id).classList.remove('selected'));
+    if(stream==='Science') document.getElementById('pillScience').classList.add('selected');
+    if(stream==='Commerce') document.getElementById('pillCommerce').classList.add('selected');
+    if(stream==='Arts') document.getElementById('pillArts').classList.add('selected');
+
+    const g = document.getElementById('pucGroup'); g.innerHTML = '<option value="" disabled selected>-- choose group --</option>';
+    if(stream==='Science'){ addOption(g,'PCMB'); addOption(g,'PCMCS'); }
+    else if(stream==='Commerce'){ addOption(g,'CEBA'); addOption(g,'SEBA'); addOption(g,'HEBA'); addOption(g,'MEBA'); }
+    else{ addOption(g,'HEP'); addOption(g,'HEPS'); addOption(g,'HESP'); }
+  }
+  function addOption(sel,txt){ const o=document.createElement('option'); o.value=txt; o.textContent=txt; sel.appendChild(o); }
+
+  function lockStream(){
+    const group = document.getElementById('pucGroup').value;
+    if(!SELECTED.pucStream || !group){ alert('Select stream & group'); return; }
+    SELECTED.pucGroup = group;
+    // RESET FLAG when stream is locked
+    PUC_CALCULATED = false; 
+    buildPUCInputs(SELECTED.pucStream, SELECTED.pucGroup);
+    document.getElementById('pucTitle').textContent = `PUC Marks — ${SELECTED.pucStream} / ${SELECTED.pucGroup}`;
+    showPage('page-puc');
+  }
+
+  /* Build PUC inputs & exam buttons */
+  function buildPUCInputs(stream, group){
+    const wrap = document.getElementById('pucInputs'); wrap.innerHTML='';
+    addPUCInput(wrap,'kannada','Kannada (Language)');
+    if(stream==='Science'){
+      addPUCInput(wrap,'physics','Physics');
+      addPUCInput(wrap,'chemistry','Chemistry');
+      if(group==='PCMB') addPUCInput(wrap,'biology','Biology');
+      else addPUCInput(wrap,'cs','Computer Science');
+      addPUCInput(wrap,'maths_puc','Maths');
+      addPUCInput(wrap,'english_puc','English');
+
+      if(group==='PCMB') showExamSelectors(['NEET','KCET']);
+      else showExamSelectors(['JEE','KCET','COMEDK']);
+    } else if(stream==='Commerce'){
+      addPUCInput(wrap,'accountancy','Accountancy');
+      addPUCInput(wrap,'business','Business Studies');
+      addPUCInput(wrap,'economics','Economics');
+      addPUCInput(wrap,'optional_puc','Optional (CS / PE / Maths)');
+      addPUCInput(wrap,'english_puc','English');
+      hideExamSelectors();
+    } else {
+      addPUCInput(wrap,'history','History'); addPUCInput(wrap,'economics_puc','Economics');
+      addPUCInput(wrap,'sociology','Sociology'); addPUCInput(wrap,'optional_puc','Optional');
+      addPUCInput(wrap,'english_puc','English');
+      hideExamSelectors();
+    }
+    const note = document.createElement('div'); note.className='muted'; note.textContent='NOTE: Enter marks out of 100 for PUC MARKS.';
+    wrap.appendChild(note);
+  }
+
+  function addPUCInput(parent,id,label){
+    const d = document.createElement('div'); d.className='input-wrap'; d.style.marginBottom='8px';
+    d.innerHTML = `<label for="${id}">${label}</label><input id="${id}" type="number" min="0" max="100">`;
+    parent.appendChild(d);
+  }
+
+  function showExamSelectors(exams){
+    const area = document.getElementById('examSelectors'); const buttons = document.getElementById('examButtons');
+    buttons.innerHTML='';
+    exams.forEach(e=>{
+      const b = document.createElement('button'); b.className='stream-pill'; b.textContent=e;
+      b.onclick = ()=> askRankAndShow(e);
+      buttons.appendChild(b);
+    });
+    area.style.display='block';
+    hideExamList();
+  }
+  function hideExamSelectors(){ document.getElementById('examSelectors').style.display='none'; document.getElementById('examButtons').innerHTML=''; }
+
+  /* -------- Validation: ensure PUC marks filled before allowing rank entry -------- */
+  function validatePUCMarks(){
+    // get all visible inputs inside #pucInputs
+    const inputs = Array.from(document.querySelectorAll('#pucInputs input'));
+    if(inputs.length === 0) return { ok:false, message:'No PUC inputs defined. Select stream & group first.' };
+
+    for(let i=0;i<inputs.length;i++){
+      const el = inputs[i];
+      const v = el.value.trim();
+      if(v === ''){
+        el.focus();
+        return { ok:false, message:`Please enter mark for "${el.previousElementSibling ? el.previousElementSibling.textContent : el.id}".` };
+      }
+      const n = Number(v);
+      if(!Number.isFinite(n) || n < 0 || n > 100){
+        el.focus();
+        return { ok:false, message:`Invalid mark for "${el.previousElementSibling ? el.previousElementSibling.textContent : el.id}". Enter 0–100.` };
+      }
+    }
+    // Additional check: if PCMB ensure biology exists and filled
+    if(SELECTED.pucStream === 'Science' && SELECTED.pucGroup === 'PCMB'){
+      const bio = document.getElementById('biology');
+      if(!bio || bio.value.trim() === ''){
+        bio && bio.focus();
+        return { ok:false, message:'Please enter Biology marks (required for NEET / KCET biology recommendations).' };
+      }
+    }
+    return { ok:true };
+  }
+
+  /* Ask rank and show list — (UPDATED with PUC_CALCULATED check) */
+  function askRankAndShow(examKey){
+    // NEW: Check if calculation has been performed first
+    if(!PUC_CALCULATED){
+      alert('You must click "Calculate" first to process your PUC marks before checking rank.');
+      return;
+    }
+
+    // validate PUC marks (redundant, but good to keep in case someone calculates and then changes marks)
+    const valid = validatePUCMarks();
+    if(!valid.ok){
+      alert(valid.message);
+      return;
+    }
+    
+    SELECTED.currentExam = examKey;
+    openRankModal(examKey);
+  }
+
+  /* Modal control */
+  function openRankModal(examKey){
+    const backdrop = document.getElementById('modalBackdrop');
+    backdrop.style.display = 'flex';
+    document.getElementById('rankInput').value = '';
+    document.getElementById('rankTitle').textContent = `${examKey}: Enter your rank`;
+    // set confirm behavior
+    const confirmBtn = document.getElementById('rankConfirmBtn');
+    confirmBtn.onclick = ()=>{
+      const val = parseInt(document.getElementById('rankInput').value,10);
+      if(isNaN(val) || val <= 0){
+        alert('Enter a valid numeric rank (≥1).');
+        return;
+      }
+      closeRankModal();
+      showRankedColleges(examKey, val);
+    };
+  }
+  function closeRankModal(){
+    const backdrop = document.getElementById('modalBackdrop');
+    backdrop.style.display = 'none';
+  }
+
+  /* Determine band and show 5 colleges (unique per exam) */
+  function showRankedColleges(examKey, rank){
+    const list = TOP_BY_EXAM[examKey] || [];
+    let band = 3;
+    if(rank <= 1000) band = 0;
+    else if(rank <= 10000) band = 1;
+    else if(rank <= 20000) band = 2;
+    else band = 3;
+
+    const start = band * 5;
+    const slice = list.slice(start, start + 5);
+
+    // If examKey is KCET and group is PCMB ensure the list used is biology-focused (we already filled KCET with biology lists).
+    // Construct UI
+    const container = document.getElementById('examLists');
+    let html = `<div style="display:flex;justify-content:space-between;align-items:center">
+                  <strong style="font-size:15px">${examKey} — Recommended colleges for rank ${rank}</strong>
+                  <button class="btn ghost" style="padding:6px 10px;font-size:13px" onclick="hideExamList()">Close</button>
+                </div>`;
+    html += '<ul>';
+    if(slice.length === 0){
+      html += '<li>No colleges found for this band (data missing).</li>';
+    } else {
+      // ensure uniqueness across displayed lists? the TOP lists are separate per exam so they are different by design.
+      slice.forEach(name => html += `<li>${name}</li>`);
+    }
+    html += '</ul>';
+    html += `<div class="muted">BASED ON YOUR RANK.</div>`;
+    container.innerHTML = html;
+    container.classList.add('active');
+    container.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+  function hideExamList(){
+    const container = document.getElementById('examLists');
+    container.classList.remove('active');
+    container.innerHTML = '';
+  }
+
+  /* PUC calc & clear (UPDATED to use PUC_CALCULATED flag) */
+  function clearPUC(){
+    document.querySelectorAll('#pucInputs input').forEach(i=>i.value='');
+    document.getElementById('puc_result').style.display='none';
+    document.getElementById('puc_bar').style.display='none';
+    document.getElementById('puc_fill').style.width='0%';
+    hideExamList();
+    PUC_CALCULATED = false; // RESET FLAG
+  }
+  function calculatePUC(){
+    const inputs = Array.from(document.querySelectorAll('#pucInputs input'));
+    if(inputs.length === 0){ alert('No PUC inputs defined. Select stream first.'); return; }
+    const vals = inputs.map(i => parseFloat(i.value));
+    if(vals.some(v=>isNaN(v))){ alert('Please enter all PUC marks'); return; }
+    const total = vals.reduce((a,b)=>a+b,0);
+    const percent = total / vals.length;
+    let degree = 'General BA / BCom / BSc';
+    const mathsIndex = inputs.findIndex(i => i.id && i.id.includes('math'));
+    const mathsMark = mathsIndex >= 0 ? vals[mathsIndex] : 0;
+    if(percent >= 85 && mathsMark >= 80) degree = 'Engineering / BSc (CS/Maths)';
+    else if(percent >= 70 && mathsMark >= 60) degree = 'BCA / BCom / BBA';
+    else if(percent >= 60) degree = 'BA / BCom / BSc';
+    else degree = 'Consider diploma / skill courses or retake';
+    const res = document.getElementById('puc_result');
+    res.style.display='block';
+    res.innerHTML = `Total: <b>${total}</b><br>Percentage (avg): <b>${percent.toFixed(2)}%</b><br>Suggested Degree Path: <b>${degree}</b>`;
+    document.getElementById('puc_bar').style.display='block';
+    document.getElementById('puc_fill').style.width = Math.min(100,percent) + '%';
+    
+    // NEW: SET FLAG UPON SUCCESSFUL CALCULATION
+    PUC_CALCULATED = true;
+  }
+
+  /* small helper: close modal when clicking backdrop */
+  document.getElementById('modalBackdrop').addEventListener('click', function(e){
+    if(e.target === this){ closeRankModal(); }
+  });
+
+  /* initialization helpers */
+  const pucGroup = document.getElementById('pucGroup');
+  const pup = document.getElementById('pucInputs');
+
+  // Expose functions for window
+  window.showPage = showPage;
+  window.handlePhoto = handlePhoto;
+  window.submitLogin = submitLogin;
+  window.logout = logout; // Expose new logout
+  window.clearSSLC = clearSSLC;
+  window.calculateSSLC = calculateSSLC;
+  window.selectStream = selectStream;
+  window.lockStream = lockStream;
+  window.askRankAndShow = askRankAndShow;
+  window.closeRankModal = closeRankModal;
+  window.clearPUC = clearPUC;
+  window.calculatePUC = calculatePUC;
+  window.hideExamList = hideExamList;
+  window.validatePUCMarks = validatePUCMarks; // Expose for completeness
+  // Run initial UI update
+  document.addEventListener('DOMContentLoaded', updateUserInfoDisplay);
+</script>
+</body>
+</html>
